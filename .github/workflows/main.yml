@@ -1,4 +1,5 @@
 name: Deploy to AWS EC2
+
 on:
   push:
     branches:
@@ -20,10 +21,11 @@ jobs:
 
       - name: Add EC2 to known_hosts
         run: |
-          ssh-keyscan -H 54.242.167.41 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy files to EC2
+      - name: SSH into EC2 and pull latest code
         run: |
-          scp -i ~/.ssh/id_rsa -r . ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/pastor
-          git pull origin main
-     
+          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/${{ secrets.EC2_USER }}/pastor
+            git pull origin main
+           

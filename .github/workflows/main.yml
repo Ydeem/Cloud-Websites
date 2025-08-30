@@ -1,5 +1,4 @@
 name: Deploy to EC2
-
 on:
   push:
     branches:
@@ -7,7 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -15,14 +14,14 @@ jobs:
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v0.1.10
       with:
-        host: ${{ secrets.EC2_HOST }}
+        host:  18.232.147.129
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          cd /home/ec2-user  # or your preferred directory
-          if [ ! -d "your-repo-name" ]; then
-            git clone https://github.com/your-username/your-repo-name.git
+          cd /home/ubuntu  # or your preferred directory
+          if [ ! -d "Cloud-Websites" ]; then
+            git clone https://github.com/Ydeem/Cloud-Websites.git
           else
-            cd your-repo-name
+            cd Cloud-Websites
             git pull origin main
           fi
